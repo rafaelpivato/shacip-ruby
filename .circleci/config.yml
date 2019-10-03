@@ -34,7 +34,7 @@ jobs:
       - bundle
       - run:
           name: Running Linter
-          command: bundle exec rubocop --linter
+          command: bundle exec rubocop --lint
   test:
     executor: ruby-executor
     steps:
