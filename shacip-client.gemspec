@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary = 'Shacip Ruby Client'
   s.license = 'MIT'
 
-  s.require_ruby_version = '>= 2.5'
+  s.require_ruby_version = '>= 2.6.4'
 
   s.files = Dir['README.md', 'lib/**/*.rb', 'MIT-LICENSE']
 end

@@ -1,0 +1,53 @@
+version: 2.1
+executors:
+  ruby-executor:
+    docker:
+      - image: circleci/ruby:2.6.4
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
+
+commands:
+  bundle:
+    description: "Installs bundler gems using cache"
+    steps:
+      - run:
+          name: Which bundler?
+          command: bundle -v
+      - restore_cache:
+          key: shacip-client-alpha-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install --deployment
+      - save_cache:
+          key: shacip-client-alpha-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+jobs:
+  lint:
+    executor: ruby-executor
+    steps:
+      - checkout
+      - bundle
+      - run:
+          name: Running Linter
+          command: bundle exec rubocop --linter
+  test:
+    executor: ruby-executor
+    steps:
+      - checkout
+      - bundle
+      - run:
+          name: Running Tests
+          command: bundle exec rake test
+
+workflows:
+  testing:
+    jobs:
+      - lint:
+      - test:
+          requires:
+            - lint
