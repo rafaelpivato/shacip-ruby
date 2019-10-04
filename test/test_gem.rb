@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'minitest/autorun'
-require 'shacip-client'
 
 class TestGem < Minitest::Test
   def test_running

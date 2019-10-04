@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'minitest/autorun'
-require 'shacip-client'
 
 class TestEndorsement < Minitest::Test
   include Shacip::Client
@@ -24,7 +22,7 @@ class TestEndorsement < Minitest::Test
 
   def test_set_credentials
     endorsement = Endorsement.new
-    endorsement.email = 'foobar@example.com'
+    endorsement.email = 'foo@example.com'
     endorsement.password = 'foobar'
     assert_equal 'foo@example.com', endorsement.email
     assert_equal 'foobar', endorsement.password

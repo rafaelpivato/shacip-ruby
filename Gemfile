@@ -12,5 +12,8 @@ group :development, :test do
   gem 'codacy-coverage', require: false
   gem 'minitest'
   gem 'minitest-ci'
+  gem 'minitest-fail-fast'
+  gem 'minitest-reporters'
+  gem 'redgreen'
   gem 'rubocop'
 end

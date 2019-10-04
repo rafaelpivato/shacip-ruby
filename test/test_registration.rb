@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require 'minitest/autorun'
-require 'shacip-client'
 
 class TestRegistration < Minitest::Test
   include Shacip::Client
@@ -24,7 +22,7 @@ class TestRegistration < Minitest::Test
 
   def test_set_signup
     registration = Registration.new
-    registration.email = 'foobar@example.com'
+    registration.email = 'foo@example.com'
     registration.password = 'foobar'
     assert_equal 'foo@example.com', registration.email
     assert_equal 'foobar', registration.password
