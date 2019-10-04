@@ -1,6 +1,6 @@
 # Shacip Ruby Client
 
-[![CircleCI](https://circleci.com/gh/rafaelpivato/shacip-ruby.svg?style=svg)](https://circleci.com/gh/rafaelpivato/shacip-ruby) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3881d92ad5d744e19d1acc756f9ad05f)](https://www.codacy.com/manual/rafaelpivato/shacip-ruby?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rafaelpivato/shacip-ruby&amp;utm_campaign=Badge_Grade)
+[![CircleCI](https://circleci.com/gh/rafaelpivato/shacip-ruby.svg?style=svg)](https://circleci.com/gh/rafaelpivato/shacip-ruby) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3881d92ad5d744e19d1acc756f9ad05f)](https://www.codacy.com/manual/rafaelpivato/shacip-ruby?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rafaelpivato/shacip-ruby&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/3881d92ad5d744e19d1acc756f9ad05f)](https://www.codacy.com/manual/rafaelpivato/shacip-ruby?utm_source=github.com&utm_medium=referral&utm_content=rafaelpivato/shacip-ruby&utm_campaign=Badge_Coverage)
 
 A client library for connecting with [Shacip](https://github.com/rafaelpivato/shacip).
 
