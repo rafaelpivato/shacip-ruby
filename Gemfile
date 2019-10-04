@@ -8,7 +8,9 @@ ruby '2.6.4'
 gem 'rake'
 
 group :development, :test do
-  gem 'codacy-coverage'
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'codacy-coverage', require: false
+  gem 'minitest'
   gem 'minitest-ci'
   gem 'rubocop'
 end

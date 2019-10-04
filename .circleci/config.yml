@@ -42,7 +42,7 @@ jobs:
       - bundle
       - run:
           name: Running Tests
-          command: bundle exec rake test
+          command: bundle exec rake test:ci
 
 workflows:
   testing:
