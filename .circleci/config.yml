@@ -43,6 +43,8 @@ jobs:
       - run:
           name: Running Tests
           command: bundle exec rake test:ci
+      - store_test_results:
+          path: test/reports
 
 workflows:
   testing:
