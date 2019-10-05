@@ -22,7 +22,7 @@ module Shacip
       end
 
       def status
-        @response&.fetch(:status, nil)
+        @response&.dig(:data, :status)&.to_sym
       end
 
       def recognized
