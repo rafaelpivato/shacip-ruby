@@ -12,7 +12,7 @@ end
 Rake::TestTask.new do |t|
   t.name = 'test:ci'
   t.description = 'Run CI tests'
-  t.options = '--ci-report'
+  t.options = '--ci-report --exclude=/WIP/'
   t.verbose = true
   t.libs << 'test'
 end
