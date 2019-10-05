@@ -2,36 +2,17 @@
 
 require 'test_helper'
 
-class TestWIPEndorsementIntegration < Minitest::Test
-  def test_create_api_called
-    called = false
-    Api.stub :post, ->(_, _) { called = true } do
-      Endorsement.create(email: 'foo@example.com', password: 'foobar')
-    end
-    assert called
-  end
-
-  def test_create_api_resource
-    called = false
-    post_stub = lambda do |resource, _|
-      called = true
-      assert_equal('endorsement', resource)
-    end
-    Api.stub :post, post_stub do
-      Endorsement.create(email: 'foo@example.com', password: 'foobar')
-    end
-    assert called
-  end
+class TestEndorsementIntegration < Minitest::Test
+  include Shacip::Client
 
   def test_create
-    called = false
-    post_stub = lambda do |_, params|
-      called = true
-      assert_equal({ email: 'foo@example.com', password: 'foobar' }, params)
+    response = { status: 'rejected' }
+    credentials = { email: 'foo@example.com', password: 'foobar' }
+    mock = Minitest::Mock.new.expect :call, response,
+                                     [:endorsements, credentials]
+    Api.stub :post, mock do
+      Endorsement.create(credentials)
     end
-    Api.stub :post, post_stub do
-      Endorsement.create(email: 'foo@example.com', password: 'foobar')
-    end
-    assert called
+    assert mock.verify
   end
 end
