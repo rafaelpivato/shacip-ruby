@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-require_relative 'resource'
+require_relative 'common_resource'
 
 module Shacip
   module Client
     ##
     # Used to ask Shacip whether it endorses an user credentials
     #
-    class Endorsement < Resource
+    class Endorsement < CommonResource
+      data_accessor :email, :password
+
       def self.create(credentials)
         response = Api.post(:endorsements, credentials)
         Endorsement.new response
@@ -19,14 +21,6 @@ module Shacip
 
       def unknown
         status == :unknown
-      end
-
-      def email
-        data[:email]
-      end
-
-      def password
-        data[:password]
       end
 
       def organization

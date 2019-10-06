@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'resource'
+require_relative 'common_resource'
 require_relative 'resource_loadable'
 
 module Shacip
@@ -8,8 +8,10 @@ module Shacip
     ##
     # Starts and confirms registration of users against Shacip
     #
-    class Registration < Resource
+    class Registration < CommonResource
       include ResourceLoadable
+
+      data_accessor :email, :password
 
       def self.confirm(id, app = 'shacip-ruby')
         response = Api.patch(:registrations, id, confirmed: app)
@@ -27,14 +29,6 @@ module Shacip
 
       def confirmed
         status == :confirmed
-      end
-
-      def email
-        data[:email]
-      end
-
-      def password
-        data[:password]
       end
 
       def organization

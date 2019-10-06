@@ -20,6 +20,14 @@ class TestEndorsement < Minitest::Test
     assert_equal 'foobar', endorsement.password
   end
 
+  def test_set_credentials
+    endorsement = Endorsement.new
+    endorsement.email = 'foo@example.com'
+    endorsement.password = 'foobar'
+    assert_equal 'foo@example.com', endorsement.email
+    assert_equal 'foobar', endorsement.password
+  end
+
   def test_respond_to_interface
     endorsement = Endorsement.new
     assert_respond_to endorsement, :recognized
