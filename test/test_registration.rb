@@ -20,14 +20,6 @@ class TestRegistration < Minitest::Test
     assert_equal 'foobar', registration.password
   end
 
-  def test_set_signup
-    registration = Registration.new
-    registration.email = 'foo@example.com'
-    registration.password = 'foobar'
-    assert_equal 'foo@example.com', registration.email
-    assert_equal 'foobar', registration.password
-  end
-
   def test_respond_to_interface
     registration = Registration.new
     assert_respond_to registration, :accepted

@@ -18,8 +18,8 @@ class Api
   end
 
   # Gets URI for a resource
-  def resource_uri(resource)
-    URI.join base_uri, resource.to_s
+  def resource_uri(resource, id = nil)
+    URI.join base_uri, resource.to_s, id || ''
   end
 
   # Headers for an HTTP request
@@ -32,7 +32,17 @@ class Api
     Api.instance.post(resource, params)
   end
 
+  # PATCH a JSON hash to Shacip back-end
+  def self.patch(resource, id, params)
+    Api.instance.patch(resource, id, params)
+  end
+
   private
+
+  def patch(resource, id, params)
+    response = Net::HTTP.patch resource_uri(resource, id), params, headers
+    JSON.parse(response.read_body) if response.value
+  end
 
   def post(resource, params)
     response = Net::HTTP.post resource_uri(resource), params, headers
