@@ -32,6 +32,11 @@ class Api
     Api.instance.post(resource, params)
   end
 
+  # GET a JSON resource from Shacip back-end
+  def self.get(resource, id)
+    Api.instance.get(resource, id)
+  end
+
   # PATCH a JSON hash to Shacip back-end
   def self.patch(resource, id, params)
     Api.instance.patch(resource, id, params)
@@ -39,13 +44,18 @@ class Api
 
   private
 
-  def patch(resource, id, params)
-    response = Net::HTTP.patch resource_uri(resource, id), params, headers
+  def post(resource, params)
+    response = Net::HTTP.post resource_uri(resource), params, headers
     JSON.parse(response.read_body) if response.value
   end
 
-  def post(resource, params)
-    response = Net::HTTP.post resource_uri(resource), params, headers
+  def get(resource, id)
+    response = Net::HTTP.get resource_uri(resource, id), headers
+    JSON.parse(response.read_body) if response.value
+  end
+
+  def patch(resource, id, params)
+    response = Net::HTTP.patch resource_uri(resource, id), params, headers
     JSON.parse(response.read_body) if response.value
   end
 end

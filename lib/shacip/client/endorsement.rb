@@ -1,24 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'response_manageable'
+require_relative 'resource'
 
 module Shacip
   module Client
     ##
     # Used to ask Shacip whether it endorses an user credentials
     #
-    class Endorsement
-      include ResponseManageable
-
-      attr_accessor :email, :password
-      attr_reader :response
-
-      def initialize(response_or_data = {})
-        self.response_or_data = response_or_data
-        @email = data[:email]
-        @password = data[:password]
-      end
-
+    class Endorsement < Resource
       def self.create(credentials)
         response = Api.post(:endorsements, credentials)
         Endorsement.new response
@@ -30,6 +19,14 @@ module Shacip
 
       def unknown
         status == :unknown
+      end
+
+      def email
+        data[:email]
+      end
+
+      def password
+        data[:password]
       end
 
       def organization

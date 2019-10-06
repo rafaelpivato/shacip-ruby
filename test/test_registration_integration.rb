@@ -47,4 +47,15 @@ class TestRegistrationIntegration < Minitest::Test
       assert_equal :confirmed, registration.status
     end
   end
+
+  def test_load
+    response = { data: { id: 2, status: 'foobar', email: 'foo@example.com' } }
+    args = [:registrations, 2]
+    mock = Minitest::Mock.new.expect :call, response, args
+    Api.stub :get, mock do
+      registration = Registration.load 2
+      assert_equal :foobar, registration.status
+      assert_equal 2, registration.id
+    end
+  end
 end

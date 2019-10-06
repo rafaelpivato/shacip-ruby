@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'shacip/client/deep_dup'
 require 'shacip/client/endorsement'
 require 'shacip/client/organization'
 require 'shacip/client/registration'

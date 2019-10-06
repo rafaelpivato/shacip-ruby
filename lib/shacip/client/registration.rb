@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 
-require_relative 'response_manageable'
+require_relative 'resource'
+require_relative 'resource_loadable'
 
 module Shacip
   module Client
     ##
     # Starts and confirms registration of users against Shacip
     #
-    class Registration
-      include ResponseManageable
-
-      def initialize(response_or_data = {})
-        self.response_or_data = response_or_data
-      end
+    class Registration < Resource
+      include ResourceLoadable
 
       def self.confirm(id, app = 'shacip-ruby')
         response = Api.patch(:registrations, id, confirmed: app)

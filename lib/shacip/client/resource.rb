@@ -3,9 +3,18 @@
 module Shacip
   module Client
     ##
-    # Module to be included in order to manage API response data
+    # Base class for Shacip resources at client side
     #
-    module ResponseManageable
+    class Resource
+      def initialize(response_or_data = {})
+        self.response_or_data = response_or_data
+      end
+
+      # Get current resource name based on class name
+      def self.resource_name
+        (name.scan(/\w+/).last.downcase + 's').to_sym
+      end
+
       ##
       # Gets current response data Hash
       #
@@ -26,12 +35,12 @@ module Shacip
       def data=(value)
         raise ArgumentError, 'Data is not Hash' unless value.is_a? Hash
 
-        @response = { data: value.dup }
+        @response = { data: value.deep_dup }
       end
 
       # Gets current response or nil
       def response
-        @response
+        @response&.deep_dup
       end
 
       # Assigns a response Hash with at least one :data property
@@ -56,7 +65,12 @@ module Shacip
 
       # Gets status for current response as a symbol
       def status
-        @response&.dig(:data, :status)&.to_sym
+        data[:status]&.to_sym
+      end
+
+      # Get id for current response
+      def id
+        data[:id]
       end
     end
   end
