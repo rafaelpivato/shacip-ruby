@@ -13,6 +13,7 @@ class TestRegistrationIntegration < Minitest::Test
     Api.stub :post, mock do
       registration = Registration.create(credentials)
       assert_kind_of Registration, registration
+      assert_equal :accepted, registration.status
     end
     assert_mock mock
   end
@@ -24,16 +25,6 @@ class TestRegistrationIntegration < Minitest::Test
     Api.stub :post, mock do
       registration = Registration.create foo: 'bar'
       assert_equal :rejected, registration.status
-    end
-  end
-
-  def test_accepted_signup
-    response = { data: { status: 'accepted' } }
-    args = [:registrations, { foo: 'bar' }]
-    mock = Minitest::Mock.new.expect :call, response, args
-    Api.stub :post, mock do
-      registration = Registration.create foo: 'bar'
-      assert_equal :accepted, registration.status
     end
   end
 
