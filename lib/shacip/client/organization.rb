@@ -2,6 +2,7 @@
 
 require_relative 'common_resource'
 require_relative 'loadable'
+require_relative 'updatable'
 
 module Shacip
   module Client
@@ -10,6 +11,7 @@ module Shacip
     #
     class Organization < CommonResource
       include Loadable
+      include Updatable
 
       data_accessor :name, :number
     end

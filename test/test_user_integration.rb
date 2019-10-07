@@ -11,13 +11,13 @@ class TestUserIntegration < Minitest::Test
   end
 
   def test_load
-    response = { data: { id: 2, status: 'foobar', email: 'foo@example.com' } }
-    args = [:registrations, 2]
+    response = { data: { id: 2, email: 'foo@example.com' } }
+    args = [:users, 2]
     mock = Minitest::Mock.new.expect :call, response, args
     Api.stub :get, mock do
-      registration = Registration.load 2
-      assert_equal :foobar, registration.status
-      assert_equal 2, registration.id
+      user = User.load 2
+      assert_equal 'foo@example.com', user.email
+      assert_equal 2, user.id
     end
     assert_mock mock
   end
