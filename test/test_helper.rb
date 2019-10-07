@@ -6,7 +6,6 @@
 require 'byebug'
 require 'minitest'
 require 'minitest/autorun'
-require 'minitest/fail_fast'
 require 'minitest/mock'
 require 'minitest/reporters'
 require 'shacip-client'

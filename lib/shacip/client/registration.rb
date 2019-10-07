@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'common_resource'
-require_relative 'resource_loadable'
+require_relative 'loadable'
 
 module Shacip
   module Client
@@ -9,7 +9,7 @@ module Shacip
     # Starts and confirms registration of users against Shacip
     #
     class Registration < CommonResource
-      include ResourceLoadable
+      include Loadable
 
       data_accessor :email, :password
 
