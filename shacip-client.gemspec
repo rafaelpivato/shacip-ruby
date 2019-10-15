@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require 'shacip/rails/version'
+$:.push File.expand_path("../lib", __FILE__)
+require 'shacip/client/version'
 
 Gem::Specification.new do |s|
   s.name = 'shacip-client'
@@ -13,7 +14,7 @@ Gem::Specification.new do |s|
   s.summary = 'Shacip Ruby Client'
   s.license = 'MIT'
 
-  s.require_ruby_version = '>= 2.6.4'
+  s.required_ruby_version = '>= 2.6.4'
 
   s.files = Dir['README.md', 'lib/**/*.rb', 'MIT-LICENSE']
 end
