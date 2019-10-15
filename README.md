@@ -15,8 +15,8 @@ following sections.
 require 'shacip-client'
 
 Shacip::Client.configure do |config|
-  config.url = 'http://localhost:3001'
-  config.app = 'myapp.example.com'
+  config.server_url = 'http://localhost:3001'
+  config.app_name = 'myapp.example.com'
 end
 ```
 

@@ -9,7 +9,7 @@ module Minitest
     #
     def assert_api(operation, response, args, &block)
       mock = Minitest::Mock.new.expect :call, response, args
-      Api.stub operation, mock, &block
+      Shacip::Client::Api.stub operation, mock, &block
       assert_mock mock
     end
   end
