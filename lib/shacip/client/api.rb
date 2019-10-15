@@ -57,7 +57,6 @@ class Api
 
   def shift_resource(args)
     resource = args.shift
-    debugger
     if resource.is_a? Resource
       [resource, resource.id]
     else
