@@ -76,7 +76,7 @@ end
 organization_id = 2345
 organization = Organization.load(organization_id)
 puts "Owner #{organization.owner.email}"
-organization.list_users.each do |user|
+User.list(organization).each do |user|
   puts "User #{user.email}"
 end
 ```

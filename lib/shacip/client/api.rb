@@ -18,13 +18,24 @@ class Api
   end
 
   # Gets URI for a resource
-  def resource_uri(resource, id = nil)
-    URI.join base_uri, resource.to_s, id || ''
+  def resource_uri(*args)
+    resource, id = shift_resource(args)
+    current = base_uri
+    until id.nil?
+      current = URI.join current, resource, id || ''
+      resource, id = shift_resource(args)
+    end
+    current
   end
 
   # Headers for an HTTP request
   def headers
     { 'Content-Type': 'application/json' }
+  end
+
+  # GET a list of resources from Shacip back-end
+  def self.list(*args)
+    Api.instance.list(*args)
   end
 
   # POST a JSON hash to Shacip back-end
@@ -43,6 +54,29 @@ class Api
   end
 
   private
+
+  def shift_resource(args)
+    resource = args.shift
+    debugger
+    if resource.is_a? Resource
+      [resource, resource.id]
+    else
+      [resource, args.shift]
+    end
+  end
+
+  def to_name(resource)
+    if resource.is_a? Resource
+      resource.class.resource_name.to_s
+    else
+      resource.to_s
+    end
+  end
+
+  def list(*args)
+    response = Net::HTTP.get resource_uri(*args), headers
+    JSON.parse(response.read_body) if response.value
+  end
 
   def post(resource, params)
     response = Net::HTTP.post resource_uri(resource), params, headers

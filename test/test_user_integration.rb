@@ -2,12 +2,23 @@
 
 require 'test_helper'
 
-class TestUserIntegration < Minitest::Test
+class TestWIPUserIntegration < Minitest::Test
   include Shacip::Client
 
   def setup
     @user = User.new(id: 3, email: 'foo@example.com', name: 'Foo Bar',
                      nickname: 'Foo')
+  end
+
+  def test_list
+    response = { data: [{ id: 1, email: 'foo@bar' }, { id: 2 }, { id: 3 }] }
+    organization = Minitest::Mock.new
+    args = [organization]
+    assert_api :list, response, args do
+      users = User.list(organization)
+      assert_equal 'foo@bar', users.first.email
+      assert_equal 3, users.length
+    end
   end
 
   def test_load
