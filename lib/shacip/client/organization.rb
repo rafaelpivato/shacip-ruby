@@ -14,6 +14,15 @@ module Shacip
       include Updatable
 
       data_accessor :name, :number
+
+      def self.list(user)
+        response = Api.list(user, resource_name)
+        organizations = []
+        response[:data].each do |payload|
+          organizations << Organization.new(payload)
+        end
+        organizations
+      end
     end
   end
 end

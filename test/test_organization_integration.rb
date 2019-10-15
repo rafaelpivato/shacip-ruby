@@ -10,6 +10,17 @@ class TestOrganizationIntegration < Minitest::Test
                                      name: 'Foo Bar', nickname: 'Foo')
   end
 
+  def test_list
+    response = { data: [{ id: 1, name: 'Foo' }, { id: 2 }] }
+    user = Minitest::Mock.new
+    args = [user, :organizations]
+    assert_api :list, response, args do
+      organizations = Organization.list(user)
+      assert_equal 'Foo', organizations.first.name
+      assert_equal 2, organizations.length
+    end
+  end
+
   def test_load
     response = { data: { id: 2, name: 'Foo Org' } }
     args = [:organizations, 2]

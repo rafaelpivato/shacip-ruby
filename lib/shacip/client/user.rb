@@ -16,7 +16,7 @@ module Shacip
       data_accessor :email, :name, :nickname
 
       def self.list(organization)
-        response = Api.list(organization)
+        response = Api.list(organization, resource_name)
         users = []
         response[:data].each do |payload|
           users << User.new(payload)

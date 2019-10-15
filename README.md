@@ -69,7 +69,7 @@ include Shacip::Client
 
 user_id = 1234
 user = User.load(user_id)
-user.organizations.each do |org|
+Organization.list(user).each do |org|
   puts "Organization #{org.name}"
 end
 
