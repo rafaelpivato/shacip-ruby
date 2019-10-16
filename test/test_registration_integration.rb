@@ -26,6 +26,7 @@ class TestRegistrationIntegration < Minitest::Test
       registration = Registration.create foo: 'bar'
       assert_equal :rejected, registration.status
     end
+    assert_mock mock
   end
 
   def test_confirmed_signup
@@ -37,6 +38,7 @@ class TestRegistrationIntegration < Minitest::Test
       registration = Registration.confirm 1, appdomain
       assert_equal :confirmed, registration.status
     end
+    assert_mock mock
   end
 
   def test_load
@@ -48,5 +50,6 @@ class TestRegistrationIntegration < Minitest::Test
       assert_equal :foobar, registration.status
       assert_equal 2, registration.id
     end
+    assert_mock mock
   end
 end

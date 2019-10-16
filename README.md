@@ -15,8 +15,8 @@ following sections.
 require 'shacip-client'
 
 Shacip::Client.configure do |config|
-  config.url = 'http://localhost:3001'
-  config.app = 'myapp.example.com'
+  config.server_url = 'http://localhost:3001'
+  config.app_name = 'myapp.example.com'
 end
 ```
 
@@ -69,14 +69,14 @@ include Shacip::Client
 
 user_id = 1234
 user = User.load(user_id)
-user.organizations.each do |org|
+Organization.list(user).each do |org|
   puts "Organization #{org.name}"
 end
 
 organization_id = 2345
 organization = Organization.load(organization_id)
 puts "Owner #{organization.owner.email}"
-organization.list_users.each do |user|
+User.list(organization).each do |user|
   puts "User #{user.email}"
 end
 ```

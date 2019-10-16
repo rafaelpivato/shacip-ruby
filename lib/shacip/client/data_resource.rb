@@ -35,8 +35,15 @@ module Shacip
         args.each do |field|
           fsym = field.to_sym
           define_method(fsym) { data[fsym] }
-          define_method("#{field}=".to_sym) { |value| data[fsym] = value }
+          define_method("#{field}=".to_sym) { |value| update_data(fsym, value) }
         end
+      end
+
+      ##
+      # Actually updates a data attribute from an accessor
+      #
+      def update_data(field, value)
+        data[field] = value
       end
 
       ##

@@ -15,6 +15,11 @@ module Shacip
         (name.scan(/\w+/).last.downcase + 's').to_sym
       end
 
+      # Get resource name based on this instance class name
+      def resource_name
+        self.class.resource_name
+      end
+
       # Gets current response or nil
       def response
         @response&.deep_dup

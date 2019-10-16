@@ -5,7 +5,7 @@ module Shacip
     ##
     # To be included by resources that can be loaded by id
     #
-    module ResourceLoadable
+    module Loadable
       def self.included(base)
         base.extend ClassMethods
       end

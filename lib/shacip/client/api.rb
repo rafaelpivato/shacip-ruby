@@ -1,61 +1,93 @@
 # frozen_string_literal: true
 
 require 'net/http'
-require 'singleton'
 
-##
-# Handles Shacip back-end communication
-#
-class Api
-  include Singleton
+module Shacip
+  module Client
+    ##
+    # Handles Shacip back-end communication
+    #
+    class Api
+      class << self
+        # GET a list of resources from Shacip back-end
+        def list(*args)
+          Api.new.list(*args)
+        end
 
-  attr_reader :base_uri
+        # POST a JSON hash to Shacip back-end
+        def post(resource, params)
+          Api.new.post(resource, params)
+        end
 
-  # Initializes configured to connect to localhost:3000
-  def initialize(base = 'http://localhost:3000/')
-    base = URI.parse(base) unless base.is_a? URI
-    @base_uri = base
-  end
+        # GET a JSON resource from Shacip back-end
+        def get(resource, id)
+          Api.new.get(resource, id)
+        end
 
-  # Gets URI for a resource
-  def resource_uri(resource, id = nil)
-    URI.join base_uri, resource.to_s, id || ''
-  end
+        # PATCH a JSON hash to Shacip back-end
+        def patch(resource, id, params)
+          Api.new.patch(resource, id, params)
+        end
+      end
 
-  # Headers for an HTTP request
-  def headers
-    { 'Content-Type': 'application/json' }
-  end
+      attr_reader :server_url, :api_key
 
-  # POST a JSON hash to Shacip back-end
-  def self.post(resource, params)
-    Api.instance.post(resource, params)
-  end
+      # Initializes using custom server URL or configuration's one
+      def initialize(server_url = nil, api_key = nil)
+        config = Shacip::Client.configuration
+        @server_url = server_url || config.server_url
+        @api_key = api_key || config.api_key
+      end
 
-  # GET a JSON resource from Shacip back-end
-  def self.get(resource, id)
-    Api.instance.get(resource, id)
-  end
+      # Gets URI path for a resource
+      def resource_path(*args)
+        segments = []
+        segments.append(shift_segment!(args)) until args.empty?
+        segments.flatten.compact.join '/'
+      end
 
-  # PATCH a JSON hash to Shacip back-end
-  def self.patch(resource, id, params)
-    Api.instance.patch(resource, id, params)
-  end
+      # Headers for an HTTP request
+      def headers
+        hash = {}
+        hash['Content-Type'] = 'application/json'
+        hash['Authorization'] = "ShacipKey #{api_key}" unless api_key.nil?
+        hash
+      end
 
-  private
+      def list(*args)
+        request = Net::HTTP.new server_url
+        response = request.get resource_path(*args), headers
+        JSON.parse(response.read_body, symbolize_names: true) if response.value
+      end
 
-  def post(resource, params)
-    response = Net::HTTP.post resource_uri(resource), params, headers
-    JSON.parse(response.read_body) if response.value
-  end
+      def post(resource, params)
+        request = Net::HTTP.new server_url
+        response = request.post resource_path(resource), params, headers
+        JSON.parse(response.read_body, symbolize_names: true) if response.value
+      end
 
-  def get(resource, id)
-    response = Net::HTTP.get resource_uri(resource, id), headers
-    JSON.parse(response.read_body) if response.value
-  end
+      def get(resource, id)
+        request = Net::HTTP.new server_url
+        response = request.get resource_path(resource, id), headers
+        JSON.parse(response.read_body, symbolize_names: true) if response.value
+      end
 
-  def patch(resource, id, params)
-    response = Net::HTTP.patch resource_uri(resource, id), params, headers
-    JSON.parse(response.read_body) if response.value
+      def patch(resource, id, params)
+        request = Net::HTTP.new server_url
+        response = request.patch resource_path(resource, id), params, headers
+        JSON.parse(response.read_body, symbolize_names: true) if response.value
+      end
+
+      private
+
+      def shift_segment!(args)
+        resource = args.shift
+        if resource.is_a? Resource
+          [resource.resource_name, resource.id]
+        else
+          [resource, args.shift]
+        end
+      end
+    end
   end
 end
