@@ -24,3 +24,11 @@ Rake::TestTask.new do |t|
   t.libs << 'test'
   t.libs << '.'
 end
+
+Rake::TestTask.new do |t|
+  t.name = 'test:e2e'
+  t.description = 'Run End-to-End tests'
+  t.pattern = 'test/e2e/e2e*.rb'
+  t.libs << 'test'
+  t.libs << '.'
+end

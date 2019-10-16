@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'json'
 require 'net/http'
 
 module Shacip
@@ -30,13 +31,19 @@ module Shacip
         end
       end
 
-      attr_reader :server_url, :api_key
+      attr_reader :api_key, :http, :server_uri
 
       # Initializes using custom server URL or configuration's one
-      def initialize(server_url = nil, api_key = nil)
+      def initialize(server_uri = nil, api_key = nil)
         config = Shacip::Client.configuration
-        @server_url = server_url || config.server_url
+        @server_uri = URI.parse(server_uri&.to_s || config.server_uri.to_s)
         @api_key = api_key || config.api_key
+        @http = Net::HTTP.new(@server_uri.host, @server_uri.port)
+      end
+
+      # Gets full URI for a resource
+      def resource_uri(*args)
+        URI.join server_uri, resource_path(*args)
       end
 
       # Gets URI path for a resource
@@ -55,27 +62,26 @@ module Shacip
       end
 
       def list(*args)
-        request = Net::HTTP.new server_url
-        response = request.get resource_path(*args), headers
-        JSON.parse(response.read_body, symbolize_names: true) if response.value
+        send_request('GET', *args)
       end
 
       def post(resource, params)
-        request = Net::HTTP.new server_url
-        response = request.post resource_path(resource), params, headers
-        JSON.parse(response.read_body, symbolize_names: true) if response.value
+        send_request('POST', resource, params: params)
       end
 
       def get(resource, id)
-        request = Net::HTTP.new server_url
-        response = request.get resource_path(resource, id), headers
-        JSON.parse(response.read_body, symbolize_names: true) if response.value
+        send_request('GET', resource, id)
       end
 
       def patch(resource, id, params)
-        request = Net::HTTP.new server_url
-        response = request.patch resource_path(resource, id), params, headers
-        JSON.parse(response.read_body, symbolize_names: true) if response.value
+        send_request('PATCH', resource, id, params: params)
+      end
+
+      def send_request(name, *args, params: nil)
+        path = resource_uri(*args)
+        data = params&.to_json
+        response = http.send_request(name, path, data, headers)
+        JSON.parse(response.body, symbolize_names: true) unless response.value
       end
 
       private
