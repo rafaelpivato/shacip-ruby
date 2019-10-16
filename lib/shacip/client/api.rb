@@ -34,55 +34,56 @@ module Shacip
 
       # Initializes using custom server URL or configuration's one
       def initialize(server_url = nil, api_key = nil)
-        @server_url = server_url || Shacip::Client.configuration.server_url
-        @api_key = api_key || Shacip::Client.configuration.api_key
+        config = Shacip::Client.configuration
+        @server_url = server_url || config.server_url
+        @api_key = api_key || config.api_key
       end
 
-      # Gets URI for a resource
-      def resource_uri(*args)
-        resource, id = shift_resource(args)
-        current = server_url
-        until id.nil?
-          current = URI.join current, resource, id || ''
-          resource, id = shift_resource(args)
-        end
-        current
+      # Gets URI path for a resource
+      def resource_path(*args)
+        segments = []
+        segments.append(shift_segment!(args)) until args.empty?
+        segments.flatten.compact.join '/'
       end
 
       # Headers for an HTTP request
       def headers
-        hash = { 'Content-Type': 'application/json' }
-        api_key = api_key
+        hash = {}
+        hash['Content-Type'] = 'application/json'
         hash['Authorization'] = "ShacipKey #{api_key}" unless api_key.nil?
         hash
       end
 
       def list(*args)
-        response = Net::HTTP.get resource_uri(*args), headers
-        JSON.parse(response.read_body) if response.value
+        request = Net::HTTP.new server_url
+        response = request.get resource_path(*args), headers
+        JSON.parse(response.read_body, symbolize_names: true) if response.value
       end
 
       def post(resource, params)
-        response = Net::HTTP.post resource_uri(resource), params, headers
-        JSON.parse(response.read_body) if response.value
+        request = Net::HTTP.new server_url
+        response = request.post resource_path(resource), params, headers
+        JSON.parse(response.read_body, symbolize_names: true) if response.value
       end
 
       def get(resource, id)
-        response = Net::HTTP.get resource_uri(resource, id), headers
-        JSON.parse(response.read_body) if response.value
+        request = Net::HTTP.new server_url
+        response = request.get resource_path(resource, id), headers
+        JSON.parse(response.read_body, symbolize_names: true) if response.value
       end
 
       def patch(resource, id, params)
-        response = Net::HTTP.patch resource_uri(resource, id), params, headers
-        JSON.parse(response.read_body) if response.value
+        request = Net::HTTP.new server_url
+        response = request.patch resource_path(resource, id), params, headers
+        JSON.parse(response.read_body, symbolize_names: true) if response.value
       end
 
       private
 
-      def shift_resource(args)
+      def shift_segment!(args)
         resource = args.shift
         if resource.is_a? Resource
-          [resource, resource.id]
+          [resource.resource_name, resource.id]
         else
           [resource, args.shift]
         end
