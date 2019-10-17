@@ -25,7 +25,7 @@ module Shacip
       end
 
       def accepted
-        status == :confirmed
+        status == :accepted
       end
 
       def confirmed

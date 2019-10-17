@@ -54,8 +54,14 @@ class End2EndTest < Minitest::Test
     super
   end
 
-  # Accesses class context hash
-  def ctx
-    self.class.context
+  # Store set of keys to test class context
+  def store_context(hash)
+    self.class.context.merge! hash
+  end
+
+  # Loads test class context key
+  def load_context(key)
+    flunk "Cannot find context #{key}" unless self.class.context.include? key
+    self.class.context[key]
   end
 end

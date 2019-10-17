@@ -28,7 +28,7 @@ end
 Rake::TestTask.new do |t|
   t.name = 'test:e2e'
   t.description = 'Run End-to-End tests'
-  t.options = '--fail-fast'
+  #t.options = '--fail-fast'
   t.pattern = 'test/e2e/test*.rb'
   t.libs << 'test'
   t.libs << '.'
