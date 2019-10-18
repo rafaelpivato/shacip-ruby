@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'api'
 require_relative 'common_resource'
 require_relative 'loadable'
 
@@ -24,7 +25,7 @@ module Shacip
       end
 
       def accepted
-        status == :confirmed
+        status == :accepted
       end
 
       def confirmed
