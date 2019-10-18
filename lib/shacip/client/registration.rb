@@ -14,6 +14,12 @@ module Shacip
 
       data_accessor :email, :password
 
+      def initialize(*args)
+        super(*args)
+        @user = nil
+        @organization = nil
+      end
+
       def self.confirm(id, app = 'shacip-ruby')
         response = Api.patch(:registrations, id, confirmed: app)
         Registration.new(response)
@@ -33,11 +39,25 @@ module Shacip
       end
 
       def organization
-        data[:organization]
+        payload = data[:organization]
+        if payload.nil?
+          @organization = nil
+        elsif payload[:id] == @organization&.id
+          @organization
+        else
+          @organization = Organization.new(payload)
+        end
       end
 
       def user
-        data[:user]
+        payload = data[:user]
+        if payload.nil?
+          @user = nil
+        elsif payload[:id] == @user&.id
+          @user
+        else
+          @user = User.new(payload)
+        end
       end
     end
   end
